@@ -1,56 +1,39 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class PlayerMovement : MonoBehaviour
 {
+    NavMeshAgent agent;
+    [SerializeField] ParticleSystem particulasCursor;
 
-    public Camera Cam;
-
-    [SerializeField] private float speed;
-
-
-
-    private float mouseHorizontal = 2f;
-    private float mouseVertical = 2f;
-
-    private float rotClamped;
-
-    float h_mouse;
-    float v_mouse;
-    private void Awake()
+    void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked;
+        agent = GetComponent<NavMeshAgent>();
     }
 
-    private void Update()
+    void Update()
     {
-        MouseMove();
-    }
-    private void MouseMove()
-    {
-        h_mouse = mouseHorizontal * Input.GetAxis("Mouse X");
-        v_mouse = mouseVertical * -Input.GetAxis("Mouse Y");
+        if (Input.GetMouseButtonDown(0))
+        {
+            RaycastHit hit;
 
-        transform.Rotate(0, h_mouse, 0);
-
-        v_mouse = Mathf.Clamp(Cam.transform.rotation.x, -80, 80);
-
-        Cam.transform.Rotate(v_mouse, 0, 0);
-
-
-        Debug.Log(rotClamped);
+            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100))
+            {
+                agent.destination = hit.point;
+                PartCursor(hit.point);
+            }
+        }
     }
 
-    //private void Movement()
-    //{
-    //    if (Input.GetButtonDown("Horizontal"))
-    //    {
-    //    }
-
-    //    if (Input.GetButtonDown("Vertical"))
-    //    {
-    //    }
-    //}
+    void PartCursor(Vector3 pos)
+    {
+        ParticleSystem part = Instantiate(particulasCursor);
+        part.transform.position = pos;
+        pos.y += 1f;
+        part.Play();
+        Destroy(part, part.main.duration);
+    }
 
 }
