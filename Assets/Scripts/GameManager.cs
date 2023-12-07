@@ -5,4 +5,5 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public float Gravity;
+    public Interact InteractText;
 }
