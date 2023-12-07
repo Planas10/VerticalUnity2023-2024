@@ -15,6 +15,10 @@ public class PlayerMovement : MonoBehaviour
     //This script variables
     [SerializeField] private float speed;
 
+    public bool InteractingMinigame1;
+    public bool InteractingMinigame2;
+    public bool InteractingMinigame3;
+
     private void Awake()
     {
         characterController = GetComponent<CharacterController>();
@@ -24,7 +28,7 @@ public class PlayerMovement : MonoBehaviour
     private void Update()
     {
         Movement();
-        PickItem();
+        DetectInteractuables();
     }
 
     private void Movement() {
@@ -35,17 +39,13 @@ public class PlayerMovement : MonoBehaviour
         transform.eulerAngles = new Vector3(0, camS.rotationY, 0);
     }
 
-    private void PickItem()
+    private void DetectInteractuables()
     {
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, transform.forward, out hit, 5f))
+        if (Physics.Raycast(transform.position, camS.transform.forward, out hit, 5f))
         {
-            if (hit.collider.GetComponent<Pickable>()){
-
-                if (Input.GetKeyDown(KeyCode.E)) {
-                    hit.collider.gameObject.GetComponent<Pickable>().picked = true;
-                }
-            }
+            if (hit.collider.tag == "Minigame1") { InteractingMinigame1 = true; }
+            else { InteractingMinigame1 = false; }
         }
     }
 

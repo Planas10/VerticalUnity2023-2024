@@ -7,12 +7,17 @@ public class Pickable : MonoBehaviour
 {
     public bool picked;
 
-    private PlayerMovement player;
+    private GameObject player;
+
+    private void Awake()
+    {
+        player = FindObjectOfType<PlayerMovement>().gameObject;
+    }
 
     private void Update()
     {
         if (picked) {
-            transform.position = new Vector3(player.transform.position.x, player.transform.position.y, player.transform.position.z + 1f);
+            transform.position = new Vector3(player.gameObject.transform.position.x, player.gameObject.transform.position.y, player.gameObject.transform.position.z + 1f);
         }
     }
 }

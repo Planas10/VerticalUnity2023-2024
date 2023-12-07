@@ -3,7 +3,11 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Minigame1
+  - Minigame1Hint1
+  - Minigame1Hint2
+  - Door1
   layers:
   - Default
   - TransparentFX
