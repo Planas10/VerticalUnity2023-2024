@@ -1,14 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
     //Canvas Texts
     public GameObject InteractText;
-    public GameObject SKE006Hint;
-    public GameObject S018Hint;
+    public GameObject InteractTextCodes;
+    public GameObject S06K0EHint;
+    public GameObject S108Hint;
 
     //Scripts
     [SerializeField] private PlayerMovement PlayerS;
@@ -16,29 +16,53 @@ public class GameManager : MonoBehaviour
     //Components
 
     //Variables
-    public bool playerCanMove;
 
     //Minigame 1
-    public bool InteractingMinigame;
-    public bool InteractingMinigame1Hint1;
-    public bool InteractingMinigame1Hint2;
-
-
+    public bool InteractingM1;
+    public bool Interacting1Hint1 = false;
+    public bool InteractingM1Hint2 = false;
 
 
     private void Update()
     {
-        //Activate Interact Text;
-        if (InteractingMinigame) { InteractText.gameObject.SetActive(true); playerCanMove = false; }
-        else { InteractText.gameObject.SetActive(false); playerCanMove = true; }
+        ActivateInteractText();
+        ActivateMinigame1Hint1();
+        ActivateMinigame1Hint2();
+    }
 
-        //Activate Minigame1 Hint1
-        if (InteractingMinigame1Hint1) { SKE006Hint.gameObject.SetActive(true); playerCanMove = false; }
-        else { SKE006Hint.gameObject.SetActive(false); playerCanMove = true; }
+    private void ActivateInteractText()
+    {
+        if (InteractingM1) { InteractText.gameObject.SetActive(true); }
+        else { InteractText.gameObject.SetActive(false); }
+    }
+    private void ActivateMinigame1Hint1()
+    {
+        if (Interacting1Hint1 == true)
+        {
+            S06K0EHint.gameObject.SetActive(true);
+            StartCoroutine(WaitForM1Hint1());
+        }
+    }
 
-        //Activate Minigame1 Hint2
-        if (InteractingMinigame1Hint2) { S018Hint.gameObject.SetActive(true); playerCanMove = false; }
-        else { S018Hint.gameObject.SetActive(false); playerCanMove = true; }
+    private void ActivateMinigame1Hint2()
+    {
+        if (InteractingM1Hint2 == true)
+        {
+            S108Hint.gameObject.SetActive(true);
+            StartCoroutine(WaitForM1Hint2());
+        }
+    }
 
+    private IEnumerator WaitForM1Hint1()
+    {
+        yield return new WaitForSeconds(2f);
+        S06K0EHint.gameObject.SetActive(false);
+        Interacting1Hint1 = false;
+    }
+    private IEnumerator WaitForM1Hint2()
+    {
+        yield return new WaitForSeconds(2f);
+        S108Hint.gameObject.SetActive(false);
+        InteractingM1Hint2 = false;
     }
 }
