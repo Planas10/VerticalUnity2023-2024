@@ -11,9 +11,12 @@ public class PlayerMovement : MonoBehaviour
 
     //Component references
     private CharacterController characterController;
+    private Rigidbody rb;
 
     //This script variables
     [SerializeField] private float speed;
+
+    private Vector3 MoveDirection = Vector3.zero;
 
     public bool InteractingMinigame1;
     public bool InteractingMinigame2;
@@ -22,6 +25,7 @@ public class PlayerMovement : MonoBehaviour
     private void Awake()
     {
         characterController = GetComponent<CharacterController>();
+        rb = GetComponent<Rigidbody>();
         Cursor.lockState = CursorLockMode.Locked;
     }
 
@@ -32,12 +36,13 @@ public class PlayerMovement : MonoBehaviour
     }
 
     private void Movement() {
-
-        Vector3 MoveDirection = new Vector3(Input.GetAxis("Horizontal"), -gameManager.Gravity, Input.GetAxis("Vertical"));
+        MoveDirection = new Vector3(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical"));
         MoveDirection = transform.TransformDirection(MoveDirection);
         characterController.Move(MoveDirection * speed * Time.deltaTime);
         transform.eulerAngles = new Vector3(0, camS.rotationY, 0);
     }
+
+
 
     private void DetectInteractuables()
     {

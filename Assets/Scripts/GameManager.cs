@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    public float Gravity;
     public GameObject InteractText;
 
     [SerializeField] private PlayerMovement PlayerS;
