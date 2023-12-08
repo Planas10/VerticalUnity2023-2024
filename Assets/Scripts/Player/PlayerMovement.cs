@@ -16,13 +16,9 @@ public class PlayerMovement : MonoBehaviour
     private Camera _mainCamera;
 
     //Move
-    public bool CanMove;
     private Vector2 _input;
     private CharacterController _characterController;
     private Vector3 _direction;
-
-    //[SerializeField] private float smoothTime = 0.05f;
-    private float _currentVelocity;
 
     //Gravity
     private float _gravity = -9.81f;
@@ -104,29 +100,40 @@ public class PlayerMovement : MonoBehaviour
 
     private void CheckInteractuable() {
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, _mainCamera.transform.forward, out hit, 3f))
+        if (!Physics.Raycast(transform.position, _mainCamera.transform.forward, out hit, 3f))
         {
-            if (hit.collider.tag == "Minigame1") { gameManager.InteractingM1 = true; }
-            else { gameManager.InteractingM1 = false; }
+            gameManager.InteractingM1 = false;
+            gameManager.InteractingCodes = false;
+            return;
         }
+        if (hit.collider.tag == "Minigame1") { gameManager.InteractingM1 = true; }
         else { gameManager.InteractingM1 = false; }
-        if (hit.collider.tag == "Minigame1Hint1" || hit.collider.tag == "Minigame1Hint2") {
-        }
+
+        if (hit.collider.tag == "Minigame1Hint1" || hit.collider.tag == "Minigame1Hint2"){ gameManager.InteractingCodes = true; }
+        else { gameManager.InteractingCodes = false; }
+        
     }
 
     public void Interact() {
-        Debug.Log("Intentando interactuar");
         RaycastHit hit;
         if (Physics.Raycast(transform.position, _mainCamera.transform.forward, out hit, 3f))
         {
             if (hit.collider.tag == "Minigame1Hint1") { 
                 gameManager.Interacting1Hint1 = true;
+                gameManager.InteractingCodes = false;
+
             }
             else { gameManager.Interacting1Hint1 = false; }
             if (hit.collider.tag == "Minigame1Hint2") {
                 gameManager.InteractingM1Hint2 = true;
+                gameManager.InteractingCodes = false;
             }
             else { gameManager.InteractingM1Hint2 = false; }
+            if (hit.collider.tag == "Minigame1")
+            {
+                gameManager.DoingM1 = true;
+            }
+            else { gameManager.DoingM1 = false; }
         }
     }
 
