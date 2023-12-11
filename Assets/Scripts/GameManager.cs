@@ -4,22 +4,31 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    //Level bool
+    public bool Level1On;
+    public bool Level2On;
+
     //UI
-    public GameObject InteractText;
+    public GameObject InteractM1Text;
     public GameObject M1Canvas;
-    public GameObject InteractTextCodes;
+    public GameObject InteractText;
     public GameObject S06K0EHint;
     public GameObject S108Hint;
+    public GameObject door1Text;
+
+    public GameObject InteractM2PanelsText;
 
     //Scripts
     [SerializeField] private PlayerMovement PlayerS;
     [SerializeField] private CameraS CamS;
-    [SerializeField] private MinigameControler minigameControler;
+    [SerializeField] private MinigameControler minigame1Controler;
+    [SerializeField] private Minigame2Controller minigame2Controller;
 
     //Minigame 1
+    public bool lookingDoor1;
     public bool InteractingM1;
     public bool DoingM1 = false;
-    public bool InteractingCodes;
+    public bool InteractM1HintsText;
     public bool Interacting1Hint1 = false;
     public bool InteractingM1Hint2 = false;
 
@@ -27,15 +36,23 @@ public class GameManager : MonoBehaviour
 
     //GameObjects
     [SerializeField] private GameObject firstDoor;
-    //[SerializeField] private GameObject firstDoorLimit;
+
+    //Minigame 2
+    public bool InteractM2Panels;
+    public bool M2Panel1;
+    public bool M2Panel2;
 
     private void Awake()
     {
         firstDoorLimit = firstDoor.transform.position - firstDoor.transform.up * 3f;
+        Level1On = true;
+        Level2On = false;
     }
 
     private void Update()
     {
+        Debug.Log(Level2On);
+
         ActivateInteractTexts();
         ActivateMinigame1Hint1();
         ActivateMinigame1Hint2();
@@ -48,7 +65,7 @@ public class GameManager : MonoBehaviour
         if (DoingM1)
         {
             //Hide all texts + show minigame UI
-            InteractText.SetActive(false);
+            InteractM1Text.SetActive(false);
             S06K0EHint.gameObject.SetActive(false);
             S108Hint.gameObject.SetActive(false);
             M1Canvas.SetActive(true);
@@ -67,11 +84,17 @@ public class GameManager : MonoBehaviour
 
     private void ActivateInteractTexts()
     {
-        if (InteractingM1) { InteractText.SetActive(true); }
+        if (InteractingM1) { InteractM1Text.SetActive(true); }
+        else { InteractM1Text.SetActive(false); }
+
+        if (InteractM1HintsText) { InteractText.SetActive(true); }
         else { InteractText.SetActive(false); }
 
-        if (InteractingCodes) { InteractTextCodes.SetActive(true); }
-        else { InteractTextCodes.SetActive(false); }
+        if (lookingDoor1 && minigame1Controler.passwordIsCorrect != true) { door1Text.SetActive(true); }
+        else { door1Text.SetActive(false); }
+
+        if (InteractM2Panels) { InteractM2PanelsText.SetActive(true); }
+        else { InteractM2PanelsText.SetActive(false); }
     }
     private void ActivateMinigame1Hint1()
     {
@@ -117,12 +140,17 @@ public class GameManager : MonoBehaviour
     }
 
     private void OpenFirstDoor() {
-        if (minigameControler.passwordIsCorrect)
+        if (minigame1Controler.passwordIsCorrect)
         {
+            Level1On = false;
             if (Vector3.Distance(firstDoorLimit, firstDoor.transform.position) > 0.1f)
             {
                 firstDoor.transform.position -= firstDoor.transform.up * 1f * Time.deltaTime; 
             }
         }
+    }
+
+    public void RichardMode() {
+        if (!minigame1Controler.passwordIsCorrect){ minigame1Controler.passwordIsCorrect = true; }
     }
 }

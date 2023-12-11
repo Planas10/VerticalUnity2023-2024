@@ -8,6 +8,9 @@ TagManager:
   - Minigame1Hint1
   - Minigame1Hint2
   - Door1
+  - Minigame2Panel1
+  - Minigame2Panel2
+  - Level2Init
   layers:
   - Default
   - TransparentFX

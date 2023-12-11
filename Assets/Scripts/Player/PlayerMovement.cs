@@ -10,6 +10,7 @@ public class PlayerMovement : MonoBehaviour
 {
     //Scripts
     [SerializeField] private GameManager gameManager;
+    [SerializeField] private Minigame2Controller M2Controller;
 
     //Rotation
     [SerializeField] private float rotationSpeed = 500f;
@@ -62,7 +63,7 @@ public class PlayerMovement : MonoBehaviour
     }
 
     private void ApplyMovement() {
-        _characterController.Move(_direction * speed * Time.deltaTime);
+        _characterController.Move(speed * Time.deltaTime * _direction);
     }
     
     private void ApplyRotation()
@@ -98,44 +99,75 @@ public class PlayerMovement : MonoBehaviour
         _numberOfJumps = 0;
     }
 
+    //Check if detected GameObject can be interacted with
     private void CheckInteractuable() {
-        RaycastHit hit;
-        if (!Physics.Raycast(transform.position, _mainCamera.transform.forward, out hit, 3f))
+        //if Raycast detects nothing
+        if (!Physics.Raycast(transform.position, _mainCamera.transform.forward, out RaycastHit hit, 3f))
         {
             gameManager.InteractingM1 = false;
-            gameManager.InteractingCodes = false;
+            gameManager.InteractM1HintsText = false;
+            gameManager.lookingDoor1 = false;
+            gameManager.InteractM2Panels = false;
             return;
         }
-        if (hit.collider.tag == "Minigame1") { gameManager.InteractingM1 = true; }
+
+        //if Raycast detects something
+        if (hit.collider.CompareTag("Minigame1")) { gameManager.InteractingM1 = true; }
         else { gameManager.InteractingM1 = false; }
 
-        if (hit.collider.tag == "Minigame1Hint1" || hit.collider.tag == "Minigame1Hint2"){ gameManager.InteractingCodes = true; }
-        else { gameManager.InteractingCodes = false; }
-        
+        if (hit.collider.CompareTag("Minigame1Hint1") || hit.collider.CompareTag("Minigame1Hint2")) { gameManager.InteractM1HintsText = true; }
+        else { gameManager.InteractM1HintsText = false; }
+
+        if (hit.collider.CompareTag("Door1")) { gameManager.lookingDoor1 = true; }
+        else { gameManager.lookingDoor1 = false; }
+
+        if (gameManager.Level2On == true)
+        {
+            if (hit.collider.CompareTag("Minigame2Panel1") || hit.collider.CompareTag("Minigame2Panel2")) { gameManager.InteractM2Panels = true; }
+            else { gameManager.InteractM2Panels = false; }
+        }
+        else { gameManager.InteractM2Panels = false; }
     }
 
+    //function to do when interacting with GameObject
     public void Interact() {
-        RaycastHit hit;
-        if (Physics.Raycast(transform.position, _mainCamera.transform.forward, out hit, 3f))
+        if (Physics.Raycast(transform.position, _mainCamera.transform.forward, out RaycastHit hit, 3f))
         {
-            if (hit.collider.tag == "Minigame1Hint1") { 
+            if (hit.collider.CompareTag("Minigame1Hint1"))
+            {
                 gameManager.Interacting1Hint1 = true;
-                gameManager.InteractingCodes = false;
+                gameManager.InteractM1HintsText = false;
 
             }
             else { gameManager.Interacting1Hint1 = false; }
-            if (hit.collider.tag == "Minigame1Hint2") {
+
+            if (hit.collider.CompareTag("Minigame1Hint2"))
+            {
                 gameManager.InteractingM1Hint2 = true;
-                gameManager.InteractingCodes = false;
+                gameManager.InteractM1HintsText = false;
             }
             else { gameManager.InteractingM1Hint2 = false; }
-            if (hit.collider.tag == "Minigame1")
+
+            if (hit.collider.CompareTag("Minigame1"))
             {
                 gameManager.DoingM1 = true;
             }
             else { gameManager.DoingM1 = false; }
+
+            if (hit.collider.CompareTag("Minigame2Panel1")) { M2Controller.Panel1On = true; }
+            if (hit.collider.CompareTag("Minigame2Panel2")) { M2Controller.Panel2On = true; }
         }
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Level2Init"))
+        {
+            Debug.Log("Iniciando nivel 2");
+            gameManager.Level2On = true;
+        }
+    }
+
+    //Check if player is on ground
     private bool IsGrounded() => _characterController.isGrounded;
 }

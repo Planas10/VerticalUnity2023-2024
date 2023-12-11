@@ -18,6 +18,7 @@ public class MinigameControler : MonoBehaviour
     private string correctPassword = "060108";
     public bool passwordIsCorrect = false;
 
+    //Minigame 1
     public void OnClickPassNumber(string s) {
         currentPassword += s;
         PasswordText.text = currentPassword;
@@ -28,14 +29,18 @@ public class MinigameControler : MonoBehaviour
         {
             passwordIsCorrect = true;
             PasswordChecked.color = Color.green;
-            PasswordChecked.text = "correct password \n the door is open";
+            PasswordChecked.text = "code accepted \n opening door";
         }
         else
         {
             passwordIsCorrect = false;
             PasswordChecked.color = Color.red;
-            PasswordChecked.text = "incorrect password \n try again";
+            PasswordChecked.text = "incorrect code \n try again";
         }
         currentPassword = "";
     }
+
+    //Minigame 2
+
+
 }
