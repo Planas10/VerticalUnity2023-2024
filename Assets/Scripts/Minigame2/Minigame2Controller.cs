@@ -53,11 +53,6 @@ public class Minigame2Controller : MonoBehaviour
                         Panel2On = false;
                     }
                 }
-                if (canShowPanelRedText)
-                {
-                    M2Hint.SetActive(true);
-                    StartCoroutine(M2HintDisplay());
-                }
             }
         }
         else { timer = initTime; }
@@ -67,17 +62,9 @@ public class Minigame2Controller : MonoBehaviour
     private void CheckM2Completed(){
         if (Panel1On == true && Panel2On == true)
         {
-            canShowPanelRedText = false;
             gameManager.doorCanOpen = true;
         }
         else { gameManager.doorCanOpen = false; }
-    }
-
-    private IEnumerator M2HintDisplay() {
-
-        yield return new WaitForSeconds(5f);
-        canShowPanelRedText = false;
-        M2Hint.SetActive(false);    
     }
 
     private void PanelStatus() {

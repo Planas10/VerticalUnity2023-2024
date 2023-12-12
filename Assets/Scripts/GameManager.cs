@@ -76,6 +76,9 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+        //Debugs
+        Debug.Log(interactingM2Door);
+
         //minigame1
         ActivateInteractTexts();
         ActivateMinigame1Hint1();
@@ -113,7 +116,7 @@ public class GameManager : MonoBehaviour
     private void ActivateM2Canvas() {
         if (Level2On)
         {
-            generalM2Canvas.SetActive(false);
+            generalM2Canvas.SetActive(true);
         }
         else
         {
@@ -152,7 +155,6 @@ public class GameManager : MonoBehaviour
             StartCoroutine(WaitForM1Hint2());
         }
     }
-
     private IEnumerator WaitForM1Hint1()
     {
         yield return new WaitForSeconds(2f);
@@ -215,7 +217,7 @@ public class GameManager : MonoBehaviour
         {
             if (doorCanOpen)
             {
-                if (interactingM2Door) { OpenDoor2(); }
+                OpenDoor2();
             }
             else
             {
@@ -224,11 +226,16 @@ public class GameManager : MonoBehaviour
                 StartCoroutine(DeactivateCantOpenText());
             }
         }
+        else
+        {
+            cantOpenDoorText.SetActive(false);
+        }
     }
 
     private IEnumerator DeactivateCantOpenText()
     {
         yield return new WaitForSeconds(2f);
+        interactingM2Door = false;
         cantOpenDoorText.SetActive(false);
     }
 

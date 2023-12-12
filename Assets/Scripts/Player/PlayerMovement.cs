@@ -162,8 +162,8 @@ public class PlayerMovement : MonoBehaviour
             }
             else { gameManager.DoingM1 = false; }
 
-            if (hit.collider.CompareTag("Minigame2Panel1")) { M2Controller.Panel1On = true; M2Controller.canShowPanelRedText = true; }
-            if (hit.collider.CompareTag("Minigame2Panel2")) { M2Controller.Panel2On = true; M2Controller.canShowPanelRedText = true; }
+            if (hit.collider.CompareTag("Minigame2Panel1")) { M2Controller.Panel1On = true; }
+            if (hit.collider.CompareTag("Minigame2Panel2")) { M2Controller.Panel2On = true; }
 
             if (hit.collider.CompareTag("Door2")) { gameManager.interactingM2Door = true; }
             else { gameManager.interactingM2Door = false; }
