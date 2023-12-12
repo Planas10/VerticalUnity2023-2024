@@ -11,6 +11,8 @@ TagManager:
   - Minigame2Panel1
   - Minigame2Panel2
   - Level2Init
+  - Door2
+  - Level2End
   layers:
   - Default
   - TransparentFX

@@ -8,6 +8,11 @@ public class GameManager : MonoBehaviour
     public bool Level1On;
     public bool Level2On;
 
+    //Scripts
+    [SerializeField] private CameraS CamS;
+    [SerializeField] private PlayerMovement PlayerS;
+    
+    //MINIGAME 1
     //UI
     public GameObject InteractM1Text;
     public GameObject M1Canvas;
@@ -16,15 +21,13 @@ public class GameManager : MonoBehaviour
     public GameObject S108Hint;
     public GameObject door1Text;
 
-    public GameObject InteractM2PanelsText;
-
+    //GameObjects
+    [SerializeField] private GameObject firstDoor;
+    
     //Scripts
-    [SerializeField] private PlayerMovement PlayerS;
-    [SerializeField] private CameraS CamS;
     [SerializeField] private MinigameControler minigame1Controler;
-    [SerializeField] private Minigame2Controller minigame2Controller;
 
-    //Minigame 1
+    //bools
     public bool lookingDoor1;
     public bool InteractingM1;
     public bool DoingM1 = false;
@@ -32,33 +35,58 @@ public class GameManager : MonoBehaviour
     public bool Interacting1Hint1 = false;
     public bool InteractingM1Hint2 = false;
 
+    //Vectors
     private Vector3 firstDoorLimit;
 
-    //GameObjects
-    [SerializeField] private GameObject firstDoor;
 
-    //Minigame 2
+    //MINIGAME 2
+    //Scripts
+    [SerializeField] private Minigame2Controller minigame2Controller;
+
+    //UI
+    public GameObject generalM2Canvas;
+    public GameObject openDoorText;
+    public GameObject cantOpenDoorText;
+    public GameObject PanelsText;
+    public GameObject P1Status;
+    public GameObject P2Status;
+
+    //GameObjects
+    public GameObject InteractM2PanelsText;
+    [SerializeField] private GameObject Door2Object;
+
+    //bools
     public bool InteractM2Panels;
     public bool M2Panel1;
     public bool M2Panel2;
+    public bool lookingM2Door;
+    public bool interactingM2Door;
+    public bool doorCanOpen;
+
+    //Vectors
+    private Vector3 Door2Limit;
 
     private void Awake()
     {
         firstDoorLimit = firstDoor.transform.position - firstDoor.transform.up * 3f;
+        Door2Limit = Door2Object.transform.position - Door2Object.transform.up * 3f;
         Level1On = true;
         Level2On = false;
     }
 
     private void Update()
     {
-        Debug.Log(Level2On);
-
+        //minigame1
         ActivateInteractTexts();
         ActivateMinigame1Hint1();
         ActivateMinigame1Hint2();
         ActivateM1();
-
         OpenFirstDoor();
+
+        //minigame2
+        ActivateTimerM2UI();
+        M2DoorManager();
+        ActivateM2Canvas();
     }
 
     private void ActivateM1() {
@@ -79,6 +107,17 @@ public class GameManager : MonoBehaviour
         else { 
             M1Canvas.SetActive(false);
             CamS.enabled = true;
+        }
+    }
+
+    private void ActivateM2Canvas() {
+        if (Level2On)
+        {
+            generalM2Canvas.SetActive(false);
+        }
+        else
+        {
+            generalM2Canvas.SetActive(false);
         }
     }
 
@@ -127,16 +166,12 @@ public class GameManager : MonoBehaviour
         InteractingM1Hint2 = false;
     }
 
-    public void ExitGame() {
-        if (!DoingM1)
-        {
-            Application.Quit();
-        }
-        else
-        {
-            DoingM1 = false;
-            Cursor.lockState = CursorLockMode.Locked;
-        }
+    public void ExitGame() { Application.Quit(); }
+
+    public void ExitM1GUI() {
+        minigame1Controler.currentPassword = "";
+        DoingM1 = false;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     private void OpenFirstDoor() {
@@ -150,7 +185,59 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void OpenDoor2() {    
+        Level1On = false;
+        if (Vector3.Distance(Door2Limit, Door2Object.transform.position) > 0.1f)
+        {
+            Door2Object.transform.position -= Door2Object.transform.up * 1f * Time.deltaTime;
+        }
+        
+    }
+
+    private void ActivateTimerM2UI() {
+        if (minigame2Controller.Panel1On == true || minigame2Controller.Panel2On == true)
+        {
+            minigame2Controller.TimerObject.SetActive(true);
+        }
+        else
+        {
+            minigame2Controller.TimerObject.SetActive(false);
+        }
+    }
+
+    private void M2DoorManager() {
+        if (lookingM2Door)
+        {
+            openDoorText.SetActive(true);
+        }
+        else { openDoorText.SetActive(false); }
+        if (interactingM2Door)
+        {
+            if (doorCanOpen)
+            {
+                if (interactingM2Door) { OpenDoor2(); }
+            }
+            else
+            {
+                openDoorText.SetActive(false);
+                cantOpenDoorText.SetActive(true);
+                StartCoroutine(DeactivateCantOpenText());
+            }
+        }
+    }
+
+    private IEnumerator DeactivateCantOpenText()
+    {
+        yield return new WaitForSeconds(2f);
+        cantOpenDoorText.SetActive(false);
+    }
+
     public void RichardMode() {
-        if (!minigame1Controler.passwordIsCorrect){ minigame1Controler.passwordIsCorrect = true; }
+        if (Level1On && !minigame1Controler.passwordIsCorrect){ minigame1Controler.passwordIsCorrect = true; Debug.Log("Modo richard"); }
+        if (Level2On && !doorCanOpen) { 
+            minigame2Controller.Panel1On = true;
+            minigame2Controller.Panel2On = true;
+            interactingM2Door = true;
+        }
     }
 }

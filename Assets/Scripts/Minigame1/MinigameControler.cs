@@ -14,7 +14,7 @@ public class MinigameControler : MonoBehaviour
     
 
     //variables
-    private string currentPassword = "";
+    public string currentPassword = "";
     private string correctPassword = "060108";
     public bool passwordIsCorrect = false;
 
@@ -39,8 +39,4 @@ public class MinigameControler : MonoBehaviour
         }
         currentPassword = "";
     }
-
-    //Minigame 2
-
-
 }

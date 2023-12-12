@@ -43,8 +43,12 @@ public class PlayerMovement : MonoBehaviour
     private void Update()
     {
         ApplyGravity();
-        ApplyMovement();
-        ApplyRotation();
+        if (gameManager.DoingM1 == false)
+        {
+            ApplyMovement();
+            ApplyRotation();
+        }
+
         CheckInteractuable();
     }
 
@@ -108,6 +112,7 @@ public class PlayerMovement : MonoBehaviour
             gameManager.InteractM1HintsText = false;
             gameManager.lookingDoor1 = false;
             gameManager.InteractM2Panels = false;
+            gameManager.lookingM2Door = false;
             return;
         }
 
@@ -127,6 +132,9 @@ public class PlayerMovement : MonoBehaviour
             else { gameManager.InteractM2Panels = false; }
         }
         else { gameManager.InteractM2Panels = false; }
+
+        if (hit.collider.CompareTag("Door2")) { gameManager.lookingM2Door = true; }
+        else { gameManager.lookingM2Door = false; }
     }
 
     //function to do when interacting with GameObject
@@ -154,8 +162,11 @@ public class PlayerMovement : MonoBehaviour
             }
             else { gameManager.DoingM1 = false; }
 
-            if (hit.collider.CompareTag("Minigame2Panel1")) { M2Controller.Panel1On = true; }
-            if (hit.collider.CompareTag("Minigame2Panel2")) { M2Controller.Panel2On = true; }
+            if (hit.collider.CompareTag("Minigame2Panel1")) { M2Controller.Panel1On = true; M2Controller.canShowPanelRedText = true; }
+            if (hit.collider.CompareTag("Minigame2Panel2")) { M2Controller.Panel2On = true; M2Controller.canShowPanelRedText = true; }
+
+            if (hit.collider.CompareTag("Door2")) { gameManager.interactingM2Door = true; }
+            else { gameManager.interactingM2Door = false; }
         }
     }
 
@@ -163,8 +174,11 @@ public class PlayerMovement : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Level2Init"))
         {
-            Debug.Log("Iniciando nivel 2");
             gameManager.Level2On = true;
+        }
+        if (other.gameObject.CompareTag("Level2End"))
+        {
+            gameManager.Level2On = false;
         }
     }
 
