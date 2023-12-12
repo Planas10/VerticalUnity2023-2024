@@ -17,6 +17,11 @@ public class Minigame2Controller : MonoBehaviour
     public GameObject TimerObject;
     public GameObject M2Hint;
 
+    //Audio
+    [SerializeField] private AudioSource M2PanelSound;
+    private bool canPlayPanel1Sound;
+    private bool canPlayPanel2Sound;
+
     public bool Panel1On;
     public bool Panel2On;
     public bool canShowPanelRedText;
@@ -62,16 +67,33 @@ public class Minigame2Controller : MonoBehaviour
     private void CheckM2Completed(){
         if (Panel1On == true && Panel2On == true)
         {
+            gameManager.canPlayDoor2Sound = true;
             gameManager.doorCanOpen = true;
         }
-        else { gameManager.doorCanOpen = false; }
+        else { gameManager.doorCanOpen = false; gameManager.canPlayDoor2Sound = false; }
     }
 
     private void PanelStatus() {
-        if (Panel1On) { Panel1Status.text = "on"; Panel1Status.color = Color.green; }
-        else { Panel1Status.text = "off"; Panel1Status.color = Color.red; }
+        if (Panel1On) {
+            if (canPlayPanel1Sound) { M2PanelSound.Play(); canPlayPanel1Sound = false; }
+            Panel1Status.text = "on";
+            Panel1Status.color = Color.green;
+        }
+        else {
+            canPlayPanel1Sound = true;
+            Panel1Status.text = "off";
+            Panel1Status.color = Color.red;
+        }
 
-        if (Panel2On) { Panel2Status.text = "on"; Panel2Status.color = Color.green; }
-        else { Panel2Status.text = "off"; Panel2Status.color = Color.red; }
+        if (Panel2On) {
+            if (canPlayPanel2Sound) { M2PanelSound.Play(); canPlayPanel2Sound = false; }
+            Panel2Status.text = "on";
+            Panel2Status.color = Color.green;
+        }
+        else {
+            canPlayPanel2Sound = true;
+            Panel2Status.text = "off";
+            Panel2Status.color = Color.red;
+        }
     }
 }

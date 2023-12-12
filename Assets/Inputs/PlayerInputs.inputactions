@@ -33,15 +33,6 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Exit Game",
-                    "type": "Button",
-                    "id": "075b0cf3-655d-4689-b010-e203d0bdf8ff",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Richard",
                     "type": "Button",
                     "id": "265484d5-2f0c-4986-bcc7-776e99534363",
@@ -54,6 +45,15 @@
                     "name": "ExitM1",
                     "type": "Button",
                     "id": "f5851198-df72-4f05-ac93-8f6eab4949d9",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Pause",
+                    "type": "Button",
+                    "id": "d8f8709b-0c85-42ba-a088-279ce4dc44a1",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -140,17 +140,6 @@
                 },
                 {
                     "name": "",
-                    "id": "383bfa1a-2f72-4f8a-8930-1e209884d4ad",
-                    "path": "<Keyboard>/escape",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Exit Game",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "434ec418-a4f6-400b-8874-9fc4feb8b8f0",
                     "path": "<Keyboard>/o",
                     "interactions": "",
@@ -163,11 +152,22 @@
                 {
                     "name": "",
                     "id": "9072159f-97b2-4220-b746-5b69306dec6f",
-                    "path": "<Keyboard>/z",
+                    "path": "<Keyboard>/escape",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "ExitM1",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "cb98215f-b5a2-4570-88e6-91c65facb818",
+                    "path": "<Keyboard>/p",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Pause",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

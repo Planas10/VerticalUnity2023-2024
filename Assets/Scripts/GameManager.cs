@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -10,7 +11,14 @@ public class GameManager : MonoBehaviour
 
     //Scripts
     [SerializeField] private CameraS CamS;
-    [SerializeField] private PlayerMovement PlayerS;
+    [SerializeField] private PlayerMovement PlayerS;    
+    
+    //Audio
+    [SerializeField] private AudioSource openDoorSound;
+    public bool canPlayDoor1Sound;
+    public bool canPlayDoor2Sound;
+    
+    public bool gameIsPaused;
     
     //MINIGAME 1
     //UI
@@ -27,10 +35,12 @@ public class GameManager : MonoBehaviour
     //Scripts
     [SerializeField] private MinigameControler minigame1Controler;
 
+
     //bools
     public bool lookingDoor1;
     public bool InteractingM1;
     public bool DoingM1 = false;
+    public bool M1Completed = false;
     public bool InteractM1HintsText;
     public bool Interacting1Hint1 = false;
     public bool InteractingM1Hint2 = false;
@@ -110,6 +120,7 @@ public class GameManager : MonoBehaviour
         else { 
             M1Canvas.SetActive(false);
             CamS.enabled = true;
+            Cursor.lockState = CursorLockMode.Locked;
         }
     }
 
@@ -168,17 +179,21 @@ public class GameManager : MonoBehaviour
         InteractingM1Hint2 = false;
     }
 
-    public void ExitGame() { Application.Quit(); }
-
     public void ExitM1GUI() {
-        minigame1Controler.currentPassword = "";
         DoingM1 = false;
+        minigame1Controler.currentPassword = "";
         Cursor.lockState = CursorLockMode.Locked;
     }
 
     private void OpenFirstDoor() {
-        if (minigame1Controler.passwordIsCorrect)
+        if (minigame1Controler.passwordIsCorrect && M1Completed == true)
         {
+            DoingM1 = false;
+            if (canPlayDoor1Sound)
+            {
+                openDoorSound.Play();
+                canPlayDoor1Sound = false;
+            }
             Level1On = false;
             if (Vector3.Distance(firstDoorLimit, firstDoor.transform.position) > 0.1f)
             {
@@ -187,7 +202,12 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void OpenDoor2() {    
+    private void OpenDoor2() {
+        if (canPlayDoor2Sound)
+        {
+            openDoorSound.Play();
+            canPlayDoor2Sound = false;
+        }
         Level1On = false;
         if (Vector3.Distance(Door2Limit, Door2Object.transform.position) > 0.1f)
         {
@@ -240,7 +260,11 @@ public class GameManager : MonoBehaviour
     }
 
     public void RichardMode() {
-        if (Level1On && !minigame1Controler.passwordIsCorrect){ minigame1Controler.passwordIsCorrect = true; Debug.Log("Modo richard"); }
+        if (Level1On && !minigame1Controler.passwordIsCorrect){ 
+            minigame1Controler.passwordIsCorrect = true;
+            M1Completed = true;
+            canPlayDoor1Sound = true;
+        }
         if (Level2On && !doorCanOpen) { 
             minigame2Controller.Panel1On = true;
             minigame2Controller.Panel2On = true;

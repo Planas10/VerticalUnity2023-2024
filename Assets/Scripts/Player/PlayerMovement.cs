@@ -43,7 +43,7 @@ public class PlayerMovement : MonoBehaviour
     private void Update()
     {
         ApplyGravity();
-        if (gameManager.DoingM1 == false)
+        if (gameManager.DoingM1 == false && gameManager.gameIsPaused == false)
         {
             ApplyMovement();
             ApplyRotation();
@@ -123,7 +123,7 @@ public class PlayerMovement : MonoBehaviour
         if (hit.collider.CompareTag("Minigame1Hint1") || hit.collider.CompareTag("Minigame1Hint2")) { gameManager.InteractM1HintsText = true; }
         else { gameManager.InteractM1HintsText = false; }
 
-        if (hit.collider.CompareTag("Door1")) { gameManager.lookingDoor1 = true; }
+        if (hit.collider.CompareTag("Door1") && !gameManager.M1Completed) { gameManager.lookingDoor1 = true; }
         else { gameManager.lookingDoor1 = false; }
 
         if (gameManager.Level2On == true)
@@ -141,7 +141,7 @@ public class PlayerMovement : MonoBehaviour
     public void Interact() {
         if (Physics.Raycast(transform.position, _mainCamera.transform.forward, out RaycastHit hit, 3f))
         {
-            if (hit.collider.CompareTag("Minigame1Hint1"))
+            if (hit.collider.CompareTag("Minigame1Hint1") && !gameManager.M1Completed)
             {
                 gameManager.Interacting1Hint1 = true;
                 gameManager.InteractM1HintsText = false;
@@ -149,14 +149,14 @@ public class PlayerMovement : MonoBehaviour
             }
             else { gameManager.Interacting1Hint1 = false; }
 
-            if (hit.collider.CompareTag("Minigame1Hint2"))
+            if (hit.collider.CompareTag("Minigame1Hint2") && !gameManager.M1Completed)
             {
                 gameManager.InteractingM1Hint2 = true;
                 gameManager.InteractM1HintsText = false;
             }
             else { gameManager.InteractingM1Hint2 = false; }
 
-            if (hit.collider.CompareTag("Minigame1"))
+            if (hit.collider.CompareTag("Minigame1") && !gameManager.M1Completed)
             {
                 gameManager.DoingM1 = true;
             }

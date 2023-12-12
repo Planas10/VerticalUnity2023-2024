@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class CameraS : MonoBehaviour
 {
+    [SerializeField] private GameManager gameManager;
+
     public float rotationX;
     public float rotationY;
     private void LateUpdate()
@@ -12,8 +14,10 @@ public class CameraS : MonoBehaviour
         rotationY += Input.GetAxis("Mouse X");
 
         rotationX = Mathf.Clamp(rotationX, -60f, 60f);
-
-        transform.eulerAngles = new Vector3(rotationX, rotationY, 0);
+        if (gameManager.gameIsPaused == false)
+        {
+            transform.eulerAngles = new Vector3(rotationX, rotationY, 0);
+        }
     }
 
 }
