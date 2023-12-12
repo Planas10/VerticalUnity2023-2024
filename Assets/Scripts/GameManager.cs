@@ -8,6 +8,8 @@ public class GameManager : MonoBehaviour
     //Level bool
     public bool Level1On;
     public bool Level2On;
+    public bool Level3On = false;
+    public bool EndReached;
 
     //Scripts
     [SerializeField] private CameraS CamS;
@@ -15,6 +17,7 @@ public class GameManager : MonoBehaviour
     
     //Audio
     [SerializeField] private AudioSource openDoorSound;
+    [SerializeField] private AudioSource ambientSound;
     public bool canPlayDoor1Sound;
     public bool canPlayDoor2Sound;
     
@@ -76,6 +79,10 @@ public class GameManager : MonoBehaviour
     //Vectors
     private Vector3 Door2Limit;
 
+    //Minigame3
+
+    [SerializeField] private GameObject plataformasRichard;
+
     private void Awake()
     {
         firstDoorLimit = firstDoor.transform.position - firstDoor.transform.up * 3f;
@@ -86,8 +93,6 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        //Debugs
-        Debug.Log(interactingM2Door);
 
         //minigame1
         ActivateInteractTexts();
@@ -100,6 +105,11 @@ public class GameManager : MonoBehaviour
         ActivateTimerM2UI();
         M2DoorManager();
         ActivateM2Canvas();
+
+        if (EndReached == true)
+        {
+            SceneManager.LoadScene("MainMenu");
+        }
     }
 
     private void ActivateM1() {
@@ -203,11 +213,7 @@ public class GameManager : MonoBehaviour
     }
 
     private void OpenDoor2() {
-        if (canPlayDoor2Sound)
-        {
-            openDoorSound.Play();
-            canPlayDoor2Sound = false;
-        }
+
         Level1On = false;
         if (Vector3.Distance(Door2Limit, Door2Object.transform.position) > 0.1f)
         {
@@ -235,8 +241,14 @@ public class GameManager : MonoBehaviour
         else { openDoorText.SetActive(false); }
         if (interactingM2Door)
         {
+            
             if (doorCanOpen)
             {
+                if (canPlayDoor2Sound)
+                {
+                    openDoorSound.Play();
+                    canPlayDoor2Sound = false;
+                }
                 OpenDoor2();
             }
             else
@@ -270,5 +282,10 @@ public class GameManager : MonoBehaviour
             minigame2Controller.Panel2On = true;
             interactingM2Door = true;
         }
+        if (Level3On)
+        {
+            plataformasRichard.SetActive(true);
+        }
+        
     }
 }

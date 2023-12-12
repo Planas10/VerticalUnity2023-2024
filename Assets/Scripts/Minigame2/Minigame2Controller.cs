@@ -26,7 +26,7 @@ public class Minigame2Controller : MonoBehaviour
     public bool Panel2On;
     public bool canShowPanelRedText;
 
-    private int initTime = 30;
+    private int initTime = 20;
     private float timer;
 
     private void Awake()
@@ -67,10 +67,9 @@ public class Minigame2Controller : MonoBehaviour
     private void CheckM2Completed(){
         if (Panel1On == true && Panel2On == true)
         {
-            gameManager.canPlayDoor2Sound = true;
             gameManager.doorCanOpen = true;
         }
-        else { gameManager.doorCanOpen = false; gameManager.canPlayDoor2Sound = false; }
+        else { gameManager.doorCanOpen = false; }
     }
 
     private void PanelStatus() {

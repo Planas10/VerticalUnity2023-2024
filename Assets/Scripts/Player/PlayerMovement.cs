@@ -84,6 +84,14 @@ public class PlayerMovement : MonoBehaviour
     {
         _input = context.ReadValue<Vector2>();
         _direction = new Vector3(_input.x, 0.0f, _input.y);
+        if (_direction != Vector3.zero) {
+            //activar sonido pasos
+
+        }
+        else {
+            //desactivar sonido pasos
+            
+        }
     }
 
     public void Jump(InputAction.CallbackContext context)
@@ -179,6 +187,11 @@ public class PlayerMovement : MonoBehaviour
         if (other.gameObject.CompareTag("Level2End"))
         {
             gameManager.Level2On = false;
+            gameManager.Level3On = true;
+        }
+        if (other.gameObject.CompareTag("EndGame"))
+        {
+            gameManager.EndReached = true;
         }
     }
 

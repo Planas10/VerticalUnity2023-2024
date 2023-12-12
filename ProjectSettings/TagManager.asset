@@ -13,6 +13,7 @@ TagManager:
   - Level2Init
   - Door2
   - Level2End
+  - EndGame
   layers:
   - Default
   - TransparentFX
